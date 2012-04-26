@@ -1,5 +1,6 @@
 exports.HotOrNot = {
-  xmlUrl: "helium"
+  xmlHost: "data-collector.plainlystated.com"
+  xmlPort: "3001"
   rrdFilepath: "db/hot-or-not.rrd"
   viewData: {
     title: "Hot Or Not",
