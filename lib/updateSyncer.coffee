@@ -39,7 +39,7 @@ class UpdateSyncer
 
       fs.unlink "#{path}/#{filenameBase}.xml"
 
-      symlink = "#{path}/#{@app}.rrd"
+      symlink = "#{@app.rrdFilepath}.rrd"
       fs.unlink symlink, () ->
         fs.symlink "#{filenameBase}.rrd", symlink
 
