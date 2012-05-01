@@ -4,7 +4,10 @@ DateFormatter = require('./dateFormatter').DateFormatter
 RRD = require('./rrd/rrd').RRD
 
 class UpdateSyncer
-  constructor: (@host, @port, @app) ->
+  constructor: (@app) ->
+    @appName = @app.viewData.slug
+    @host = app.xmlHost
+    @port = app.xmlPort
     this.checkForUpdates()
     setInterval () =>
       this.checkForUpdates()
@@ -13,14 +16,14 @@ class UpdateSyncer
   checkForUpdates: () =>
     timestamp = new DateFormatter(new Date).filenameTimestamp()
     path = "./db"
-    newFilenameBase = "#{@app}-#{timestamp}"
+    newFilenameBase = "#{@appName}-#{timestamp}"
     file = fs.createWriteStream("#{path}/#{newFilenameBase}.xml")
 
-    console.log "Checking for updates from #{@host}:#{@port} for #{@app} @ #{timestamp}"
+    console.log "Checking for updates from #{@host}:#{@port} for #{@appName} @ #{timestamp}"
     request = http.request {
       host: @host,
       port: @port,
-      path: "/#{@app}",
+      path: "/#{@appName}",
       method: "GET"
     }, (response) =>
       console.log(" - #{response.statusCode}")
@@ -39,7 +42,7 @@ class UpdateSyncer
 
       fs.unlink "#{path}/#{filenameBase}.xml"
 
-      symlink = "#{@app.rrdFilepath}.rrd"
+      symlink = @app.rrdFilepath
       fs.unlink symlink, () ->
         fs.symlink "#{filenameBase}.rrd", symlink
 

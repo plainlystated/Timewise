@@ -9,7 +9,7 @@ class Server
     this.startServer()
     if fetchUpdates
       for name, app of @apps
-        new UpdateSyncer(app.xmlHost, app.xmlPort, app.viewData.slug)
+        new UpdateSyncer(app)
 
   startServer: () ->
     @app = module.exports = express.createServer()
@@ -59,7 +59,6 @@ class Server
       end = DateFormatter.rrd(new Date())
       new RRD(app.rrdFilepath).fetch start, end, (err, records) ->
         data = for lineOptions in [
-          { label: 'target_temp', color: 1},
           { label: 'temperature', color: 0}
         ]
           lineOptions['data'] = for record in records
